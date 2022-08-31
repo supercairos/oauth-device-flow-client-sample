@@ -1,4 +1,5 @@
 import { Issuer } from "openid-client";
+import qrcode from 'qrcode-terminal';
 
 const OAUTH_URL = "http://localhost:4444/.well-known/openid-configuration";
 const OAUTH_REDIRECT_URI = "http://localhost:1337/hello";
@@ -48,9 +49,9 @@ const authUser = async () => {
     })
     .then(([handler, client]) => {
       console.log(
-        `Got user token: ${handler.user_code} & device code: ${handler.device_code}`
+        `Got user token: ${handler.user_code} | URL: ${handler.verification_uri}`
       );
-      console.log(`Open URL: ${handler.verification_uri}`);
+      qrcode.generate(handler.verification_uri_complete, {small: true});
       console.log(`Start polling on client side`);
       return Promise.all([handler.poll(), client]);
     })
