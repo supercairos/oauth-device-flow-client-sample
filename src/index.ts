@@ -1,12 +1,14 @@
 import { Issuer } from "openid-client";
-import qrcode from 'qrcode-terminal';
+import qrcode from "qrcode-terminal";
 
 const OAUTH_URL = "http://localhost:4444/.well-known/openid-configuration";
+// const OAUTH_URL = "https://api.shadow.tech/.well-known/openid-configuration";
 const OAUTH_REDIRECT_URI = "http://localhost:1337/hello";
+const OAUTH_CLIENT_ID = "c450fc8f-a957-4350-8621-a196d648835d";
 // const OAUTH_CLIENT_ID = "noauth";
-const OAUTH_CLIENT_ID = "test";
-const OAUTH_CLIENT_SECRET = "secret";
-const OAUTH_SCOPES = "openid";
+// const OAUTH_CLIENT_ID = "59cda39e-2ec8-400b-b2fa-8cfc790fff24";
+const OAUTH_CLIENT_SECRET = "QJiupqvzVd.BVCzumqGvfVF-2F";
+const OAUTH_SCOPES = "openid offline";
 
 // hydra clients create \
 //     --endpoint http://127.0.0.1:4445 \
@@ -49,9 +51,9 @@ const authUser = async () => {
     })
     .then(([handler, client]) => {
       console.log(
-        `Got user token: ${handler.user_code} | URL: ${handler.verification_uri}`
+        `Got user token: ${handler.user_code} | URL: ${handler.verification_uri_complete}`
       );
-      qrcode.generate(handler.verification_uri_complete, {small: true});
+      qrcode.generate(handler.verification_uri_complete, { small: true });
       console.log(`Start polling on client side`);
       return Promise.all([handler.poll(), client]);
     })
